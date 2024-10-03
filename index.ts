@@ -1,12 +1,8 @@
 import dotenv from "dotenv";
 import TelegramBot, { CallbackQuery, Message } from "node-telegram-bot-api";
-import fetch from "node-fetch";
 dotenv.config();
 
 const tokenn: string | undefined = process.env.TELEGRAM_TOKEN as string;
-// const bot = new TelegramBot(tokenn, {
-//   polling: true,
-// });
 
 if (!process.env.TELEGRAM_TOKEN) {
   console.error("Telegram Bot Token not provided!");
@@ -19,7 +15,7 @@ let awaitingCurrency: boolean = false;
 let awaitingButton: boolean = false;
 let awaitingNameMessage: boolean = false;
 
-console.log("Bot had been started");
+console.log("Bot has been started");
 
 const userStates: { [key: number]: boolean } = {};
 
@@ -53,7 +49,7 @@ bot.onText(/\/start/, (msg: any) => {
 });
 
 bot.on("message", async (msg: Message) => {
-  const { chat, text, from } = msg; // Destructure 'from' here
+  const { chat, text, from } = msg;
 
   // Check if from and from.id are defined
   if (from && from.id) {
@@ -69,7 +65,7 @@ bot.on("message", async (msg: Message) => {
       const currencyCode = text.toUpperCase();
       try {
         const response = await fetch(
-          `https://v6.exchangerate-api.com/v6/f0a268a67ada5d2398cbba8d/latest/${currencyCode}`
+          ` https://v6.exchangerate-api.com/v6/f0a268a67ada5d2398cbba8d/latest/${currencyCode}`
         );
         const data: any = await response.json();
 
@@ -115,7 +111,7 @@ bot.on("message", async (msg: Message) => {
 
 bot.on("callback_query", (query: CallbackQuery) => {
   const { data, message, from } = query;
-  const chatId = message?.chat.id!; // Use non-null assertion
+  const chatId = message?.chat.id!;
 
   // Check if from and from.id are defined
   if (from && from.id) {

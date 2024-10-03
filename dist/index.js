@@ -5,12 +5,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv_1 = __importDefault(require("dotenv"));
 const node_telegram_bot_api_1 = __importDefault(require("node-telegram-bot-api"));
-const node_fetch_1 = __importDefault(require("node-fetch"));
 dotenv_1.default.config();
 const tokenn = process.env.TELEGRAM_TOKEN;
-// const bot = new TelegramBot(tokenn, {
-//   polling: true,
-// });
 if (!process.env.TELEGRAM_TOKEN) {
     console.error("Telegram Bot Token not provided!");
     process.exit(1); // Exit the process if the token is missing
@@ -19,7 +15,7 @@ const bot = new node_telegram_bot_api_1.default(process.env.TELEGRAM_TOKEN, { po
 let awaitingCurrency = false;
 let awaitingButton = false;
 let awaitingNameMessage = false;
-console.log("Bot had been started");
+console.log("Bot has been started");
 const userStates = {};
 bot.onText(/\/start/, (msg) => {
     console.log(1, msg);
@@ -43,7 +39,7 @@ bot.onText(/\/start/, (msg) => {
     });
 });
 bot.on("message", async (msg) => {
-    const { chat, text, from } = msg; // Destructure 'from' here
+    const { chat, text, from } = msg;
     // Check if from and from.id are defined
     if (from && from.id) {
         // Initialize user state if not present
@@ -55,7 +51,7 @@ bot.on("message", async (msg) => {
         else if (text?.length === 3 && /^[A-Z]{3}$/.test(text.toUpperCase())) {
             const currencyCode = text.toUpperCase();
             try {
-                const response = await (0, node_fetch_1.default)(`https://v6.exchangerate-api.com/v6/f0a268a67ada5d2398cbba8d/latest/${currencyCode}`);
+                const response = await fetch(` https://v6.exchangerate-api.com/v6/f0a268a67ada5d2398cbba8d/latest/${currencyCode}`);
                 const data = await response.json();
                 if (!data || !data.conversion_rates.RUB) {
                     throw new Error(`Курс для ${currencyCode} недоступен`);
@@ -86,7 +82,7 @@ bot.on("message", async (msg) => {
 });
 bot.on("callback_query", (query) => {
     const { data, message, from } = query;
-    const chatId = message?.chat.id; // Use non-null assertion
+    const chatId = message?.chat.id;
     // Check if from and from.id are defined
     if (from && from.id) {
         // Initialize user state if not present
